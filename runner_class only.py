@@ -69,7 +69,7 @@ class Obstacle(pygame.sprite.Sprite):
 
 	def update(self):
 		self.animation_state()
-		self.rect.x -= 6
+		self.rect.x -= game_speed
 		self.destroy()
 
 	def destroy(self):
@@ -77,7 +77,7 @@ class Obstacle(pygame.sprite.Sprite):
 			self.kill()
 
 def display_score():
-	current_time = int(pygame.time.get_ticks() / 1000) - start_time
+	current_time = int(pygame.time.get_ticks() / 100) - start_time
 	score_surf = test_font.render(f'Score: {current_time}',False,(64,64,64))
 	score_rect = score_surf.get_rect(center = (400,50))
 	screen.blit(score_surf,score_rect)
@@ -99,7 +99,8 @@ game_active = False
 start_time = 0
 score = 0
 bg_music = pygame.mixer.Sound('audio/music.wav')
-bg_music.play(loops = -1)
+bg_music.set_volume(0.5)
+music = True
 
 game_speed = 5
 sky_x_pos = 0
@@ -144,10 +145,15 @@ while True:
 		else:
 			if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
 				game_active = True
-				start_time = int(pygame.time.get_ticks() / 1000)
+				start_time = int(pygame.time.get_ticks() / 100)
 
 
 	if game_active:
+		if score % 50 == 0:
+			game_speed += 0.5
+		if music:
+			bg_music.play(loops = -1)
+			music = False
 		screen.blit(sky_surface,(sky_x_pos,sky_y_pos))
 		image_width = sky_surface.get_width()
 		screen.blit(sky_surface, (image_width + sky_x_pos, sky_y_pos))
@@ -175,6 +181,9 @@ while True:
 		game_active = collision_sprite()
 		
 	else:
+		if not music:
+			bg_music.stop()
+			music = True
 		screen.fill((94,129,162))
 		screen.blit(player_stand,player_stand_rect)
 
