@@ -101,6 +101,12 @@ score = 0
 bg_music = pygame.mixer.Sound('audio/music.wav')
 bg_music.play(loops = -1)
 
+game_speed = 5
+sky_x_pos = 0
+sky_y_pos = 0
+ground_x_pos = 0
+ground_y_pos = 300
+
 #Groups
 player = pygame.sprite.GroupSingle()
 player.add(Player())
@@ -142,8 +148,22 @@ while True:
 
 
 	if game_active:
-		screen.blit(sky_surface,(0,0))
-		screen.blit(ground_surface,(0,300))
+		screen.blit(sky_surface,(sky_x_pos,sky_y_pos))
+		image_width = sky_surface.get_width()
+		screen.blit(sky_surface, (image_width + sky_x_pos, sky_y_pos))
+		if sky_x_pos <= -image_width:
+			screen.blit(sky_surface, (image_width + sky_x_pos, sky_y_pos))
+			sky_x_pos = 0
+		sky_x_pos -= game_speed
+
+		screen.blit(ground_surface,(ground_x_pos,ground_y_pos))
+		image_width = ground_surface.get_width()
+		screen.blit(ground_surface, (image_width + ground_x_pos, ground_y_pos))
+		if ground_x_pos <= -image_width:
+			screen.blit(ground_surface, (image_width + ground_x_pos, ground_y_pos))
+			ground_x_pos = 0
+		ground_x_pos -= game_speed
+	
 		score = display_score()
 		
 		player.draw(screen)
