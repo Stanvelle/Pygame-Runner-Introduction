@@ -89,7 +89,6 @@ def collision_sprite():
 		return False
 	else: return True
 
-
 pygame.init()
 screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('Runner')
@@ -147,7 +146,6 @@ while True:
 				game_active = True
 				start_time = int(pygame.time.get_ticks() / 100)
 
-
 	if game_active:
 		if score % 50 == 0:
 			game_speed += 0.5
@@ -182,6 +180,7 @@ while True:
 		
 	else:
 		if not music:
+			game_speed = 5
 			bg_music.stop()
 			music = True
 		screen.fill((94,129,162))
